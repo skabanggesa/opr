@@ -11,7 +11,9 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- html2pdf.js Library untuk Penjanaan PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -64,6 +66,12 @@
                     <button onclick="openConfigModal()" class="hidden md:inline-flex items-center px-3 py-2 border border-slate-300 shadow-sm text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition">
                         <i class="fa-solid fa-plug text-slate-500 mr-2"></i> Integration
                     </button>
+
+                    <!-- BUTANG BAHARU: Jana OPR (Terletak di antara Integration & Muat Naik OPR) -->
+                    <button onclick="openGenerateModal()" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-xs sm:text-sm rounded-lg shadow-sm transition-all duration-150">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-xs sm:text-sm"></i> <span class="hidden sm:inline">Jana OPR</span><span class="sm:hidden">Jana</span>
+                    </button>
+
                     <button onclick="openUploadModal()" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium text-xs sm:text-sm rounded-lg shadow-sm transition-all duration-150">
                         <i class="fa-solid fa-cloud-arrow-up mr-1.5 text-xs sm:text-sm"></i> <span class="hidden sm:inline">Muat Naik OPR</span><span class="sm:hidden">Muat Naik</span>
                     </button>
@@ -84,14 +92,13 @@
                 <span class="inline-block px-2.5 py-0.5 bg-white/10 text-blue-200 text-[10px] sm:text-xs font-semibold rounded-full backdrop-blur-md">Papan Pemuka Pentadbir</span>
                 <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight leading-tight">Pengurusan & Pengarkiban OPR</h2>
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                    Urus, muat naik, dan pantau Laporan Satu Muka Surat mengikut Unit Kurikulum, Hal Ehwal Murid (HEM), dan Kokurikulum secara efisien.
+                    Urus, jana laporan automatik, muat naik, dan pantau Laporan Satu Muka Surat mengikut Unit Kurikulum, Hal Ehwal Murid (HEM), dan Kokurikulum.
                 </p>
             </div>
         </div>
 
-        <!-- Metric KPI Cards (2x2 Grid on Mobile) -->
+        <!-- Metric KPI Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-            <!-- Total OPR Card -->
             <div onclick="filterByUnit('Semua')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
@@ -110,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- Kurikulum Card -->
             <div onclick="filterByUnit('Kurikulum')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
@@ -126,7 +132,6 @@
                 </div>
             </div>
 
-            <!-- HEM Card -->
             <div onclick="filterByUnit('HEM')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
@@ -142,7 +147,6 @@
                 </div>
             </div>
 
-            <!-- Kokurikulum Card -->
             <div onclick="filterByUnit('Kokurikulum')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
@@ -177,7 +181,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Monthly Bar Chart -->
                 <div class="lg:col-span-2 bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100">
                     <h4 class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Bilangan OPR Mengikut Bulan & Unit</h4>
                     <div class="h-48 sm:h-64 relative">
@@ -185,7 +188,6 @@
                     </div>
                 </div>
 
-                <!-- Unit Distribution Doughnut Chart -->
                 <div class="bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
                     <h4 class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Agihan Peratusan Unit</h4>
                     <div class="h-44 sm:h-56 relative flex items-center justify-center">
@@ -197,24 +199,20 @@
 
         <!-- OPR Documents Section -->
         <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-            <!-- Header Tabs & Controls -->
             <div class="p-4 sm:p-6 border-b border-slate-200 space-y-3 sm:space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                         <h3 class="text-base sm:text-lg font-bold text-slate-800">Senarai Rekod OPR</h3>
-                        <p class="text-[11px] sm:text-xs text-slate-500">Saring dan semak laporan satu muka surat yang telah dimuat naik</p>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Saring dan semak laporan satu muka surat yang telah dimuat naik atau dijana</p>
                     </div>
 
-                    <!-- Search and Filters (Stacked nicely on Mobile) -->
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                        <!-- Search input -->
                         <div class="relative w-full sm:w-48">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                             <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari tajuk OPR..." class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                         </div>
 
                         <div class="flex items-center space-x-2">
-                            <!-- Month Filter -->
                             <select id="monthFilter" onchange="applyFilters()" class="flex-1 sm:flex-none text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700">
                                 <option value="Semua">Semua Bulan</option>
                                 <option value="01">Januari</option>
@@ -231,7 +229,6 @@
                                 <option value="12">Disember</option>
                             </select>
 
-                            <!-- View Switcher -->
                             <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
                                 <button id="viewGridBtn" onclick="toggleView('grid')" class="p-1.5 rounded text-slate-600 hover:text-slate-900 bg-white shadow-xs">
                                     <i class="fa-solid fa-grip-vertical text-xs"></i>
@@ -244,7 +241,6 @@
                     </div>
                 </div>
 
-                <!-- Unit Switching Tabs (Horizontally Scrollable on Mobile) -->
                 <div class="flex space-x-1.5 border-b border-slate-100 pt-1 overflow-x-auto no-scrollbar">
                     <button onclick="filterByUnit('Semua')" id="tabSemua" class="unit-tab px-3.5 py-2 text-xs font-semibold rounded-t-lg border-b-2 border-blue-600 text-blue-600 whitespace-nowrap shrink-0">
                         Semua Unit
@@ -263,7 +259,6 @@
 
             <!-- Data Container -->
             <div class="p-4 sm:p-6 relative">
-                <!-- Loading Overlay -->
                 <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/80 backdrop-blur-xs z-10 flex items-center justify-center p-4">
                     <div class="flex items-center space-x-2 text-blue-600 font-semibold text-xs sm:text-sm bg-white p-3 rounded-xl shadow-lg border border-slate-100">
                         <i class="fa-solid fa-circle-notch fa-spin text-lg"></i>
@@ -271,12 +266,8 @@
                     </div>
                 </div>
 
-                <!-- Grid View -->
-                <div id="oprGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-                    <!-- Dynamic Grid Content Rendered by JS -->
-                </div>
+                <div id="oprGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
 
-                <!-- Table View (Hidden by default) -->
                 <div id="oprTableView" class="hidden overflow-x-auto border border-slate-200 rounded-xl">
                     <table class="w-full text-left text-xs text-slate-600 min-w-[500px]">
                         <thead class="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold uppercase tracking-wider">
@@ -287,33 +278,150 @@
                                 <th class="p-3 text-right">Tindakan</th>
                             </tr>
                         </thead>
-                        <tbody id="oprTableBody" class="divide-y divide-slate-200">
-                            <!-- Dynamic Table Rows Rendered by JS -->
-                        </tbody>
+                        <tbody id="oprTableBody" class="divide-y divide-slate-200"></tbody>
                     </table>
                 </div>
 
-                <!-- Empty State -->
                 <div id="emptyState" class="hidden text-center py-10 space-y-2">
                     <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
                         <i class="fa-solid fa-folder-open text-xl"></i>
                     </div>
                     <h4 class="text-xs sm:text-sm font-semibold text-slate-700">Tiada Rekod OPR Dijumpai</h4>
-                    <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Sila muat naik OPR baharu atau tukar kata kunci carian/penapis anda.</p>
+                    <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Sila jana/muat naik OPR baharu atau tukar kata kunci carian anda.</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Floating Action Button for Mobile Quick Upload -->
-    <button onclick="openUploadModal()" class="sm:hidden fixed right-4 bottom-5 z-40 w-12 h-12 bg-blue-600 text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition">
-        <i class="fa-solid fa-plus text-lg"></i>
+    <!-- Floating Action Button for Mobile Quick Access -->
+    <button onclick="openGenerateModal()" class="sm:hidden fixed right-4 bottom-5 z-40 w-12 h-12 bg-emerald-600 text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition">
+        <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
     </button>
+
+    <!-- MODAL BAHARU: Jana OPR (Borang Modal Input) -->
+    <div id="generateModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl border border-slate-100 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-emerald-900 text-white px-4 sm:px-6 py-3.5 flex justify-between items-center shrink-0">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-700 text-emerald-100 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base leading-tight">Jana Laporan OPR Baharu</h3>
+                        <p class="text-[10px] text-emerald-200">Bina Laporan Satu Muka Surat (PDF) Mengikut Format Standard</p>
+                    </div>
+                </div>
+                <button onclick="closeGenerateModal()" class="text-emerald-200 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form Body -->
+            <form id="generateForm" onsubmit="handleGenerateSubmit(event)" class="p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar text-xs">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <!-- Unit Select -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Unit OPR <span class="text-red-500">*</span></label>
+                        <select id="genUnit" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                            <option value="" disabled selected>-- Pilih Unit --</option>
+                            <option value="Kurikulum">Kurikulum</option>
+                            <option value="HEM">Hal Ehwal Murid (HEM)</option>
+                            <option value="Kokurikulum">Kokurikulum</option>
+                        </select>
+                    </div>
+
+                    <!-- Tarikh & Hari -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Tarikh Program <span class="text-red-500">*</span></label>
+                        <input type="date" id="genTarikh" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <!-- Nama Sekolah -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Nama Sekolah <span class="text-red-500">*</span></label>
+                        <input type="text" id="genSekolah" required value="SEKOLAH KEBANGSAAN ABANG GESA" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+
+                    <!-- Tajuk Program -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Tajuk Program / Aktiviti <span class="text-red-500">*</span></label>
+                        <input type="text" id="genTajuk" required placeholder="Cth: JOM SERTAI AKTIVITI KOKURIKULUM" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Muat Naik Gambar (Up to 5) -->
+                <div class="border border-slate-200 bg-slate-50/50 rounded-xl p-3.5">
+                    <label class="block font-semibold text-slate-700 mb-1">Muat Naik Gambar Aktiviti (Maksimum 5 Keping) <span class="text-red-500">*</span></label>
+                    <input type="file" id="genImages" accept="image/*" multiple onchange="handleImagePreviews(event)" required class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-100 file:text-emerald-700 hover:file:bg-emerald-200">
+                    <p class="text-[10px] text-slate-400 mt-1">Sila pilih 4 hingga 5 keping gambar untuk paparan susun atur visual OPR.</p>
+                    
+                    <!-- Container Preview Gambar -->
+                    <div id="imagePreviewContainer" class="grid grid-cols-5 gap-2 mt-3 hidden"></div>
+                </div>
+
+                <!-- Objektif Program -->
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Objektif Program <span class="text-red-500">*</span></label>
+                    <textarea id="genObjektif" rows="3" required placeholder="Masukkan objektif program (satu objektif setiap baris)" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">Memberikan pendedahan awal kepada murid tentang jenis-jenis aktiviti.
+Membantu murid mengenali kelab, sukan dan unit beruniform.
+Menggalakkan penyertaan aktif murid.</textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <!-- Sasaran Program -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Sasaran Program <span class="text-red-500">*</span></label>
+                        <input type="text" id="genSasaran" required placeholder="Cth: Murid tahun 4, 5 dan 6" value="Murid tahun 4, 5 dan 6." class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+
+                    <!-- Ringkasan Aktiviti -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Aktiviti <span class="text-red-500">*</span></label>
+                        <input type="text" id="genAktiviti" required placeholder="Cth: Aktiviti berjalan lancar seperti dirancang." value="Aktiviti berjalan lancar seperti dirancang." class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Impak Program -->
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Impak Program <span class="text-red-500">*</span></label>
+                    <textarea id="genImpak" rows="2" required placeholder="Masukkan impak program" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">Murid lebih jelas dan faham tentang fungsi dan peranan setiap aktiviti.
+Peningkatan kadar penyertaan murid dalam aktiviti.</textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2 border-t border-slate-100">
+                    <!-- Disediakan Oleh (Nama) -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Disediakan Oleh (Nama) <span class="text-red-500">*</span></label>
+                        <input type="text" id="genNamaPenyedia" required placeholder="Cth: Yasmin Huzaimah Binti Aladdin" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+
+                    <!-- Jawatan -->
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Jawatan <span class="text-red-500">*</span></label>
+                        <input type="text" id="genJawatanPenyedia" required placeholder="Cth: Penolong Kanan Kokurikulum" value="Penolong Kanan Kokurikulum" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Footer Action Buttons -->
+                <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-100 shrink-0">
+                    <button type="button" onclick="closeGenerateModal()" class="px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">
+                        Batal
+                    </button>
+                    <button type="submit" id="btnGenerateSubmit" class="px-5 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition flex items-center">
+                        <i class="fa-solid fa-file-pdf mr-1.5"></i> Jana PDF & Simpan Ke Drive
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- MODAL 1: Muat Naik OPR -->
     <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 overflow-hidden my-auto max-h-[90vh] flex flex-col">
-            <!-- Modal Header -->
             <div class="bg-slate-50 px-4 sm:px-6 py-3.5 border-b border-slate-200 flex justify-between items-center shrink-0">
                 <div class="flex items-center space-x-2">
                     <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs sm:text-sm">
@@ -326,9 +434,7 @@
                 </button>
             </div>
 
-            <!-- Modal Form -->
             <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="p-4 sm:p-6 space-y-3.5 sm:space-y-4 overflow-y-auto">
-                <!-- Unit Select -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Unit OPR <span class="text-red-500">*</span></label>
                     <select id="inputUnit" required class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
@@ -339,19 +445,16 @@
                     </select>
                 </div>
 
-                <!-- Tarikh OPR -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh Program/Laporan <span class="text-red-500">*</span></label>
                     <input type="date" id="inputTarikh" required class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                 </div>
 
-                <!-- Tajuk OPR -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tajuk OPR <span class="text-red-500">*</span></label>
                     <input type="text" id="inputTajuk" required placeholder="Contoh: Laporan Hari Sukan Negara 2026" class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                 </div>
 
-                <!-- File Drag & Drop Upload Zone -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Fail Dokumen (PDF sahaja) <span class="text-red-500">*</span></label>
                     <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/20 rounded-xl p-4 sm:p-5 text-center transition cursor-pointer relative">
@@ -369,7 +472,6 @@
                     </div>
                 </div>
 
-                <!-- Footer Buttons -->
                 <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-100 shrink-0">
                     <button type="button" onclick="closeUploadModal()" class="px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">
                         Batal
@@ -432,6 +534,63 @@
         </div>
     </div>
 
+    <!-- CONCEALED PRINT TEMPLATE FOR PDF GENERATION (A4 Standard Format) -->
+    <div class="fixed -left-[9999px] top-0 pointer-events-none">
+        <div id="oprPdfRenderArea" class="w-[794px] min-h-[1123px] p-8 bg-white text-slate-900 font-sans border border-slate-200 flex flex-col justify-between box-border">
+            <div>
+                <!-- OPR Header Banner -->
+                <div class="border-b-4 border-slate-900 pb-3 mb-4 flex justify-between items-end">
+                    <div>
+                        <h2 id="pdfHeaderSchool" class="text-lg font-black tracking-wider uppercase text-slate-900">SEKOLAH KEBANGSAAN ABANG GESA</h2>
+                        <h1 id="pdfHeaderTitle" class="text-xl font-extrabold uppercase text-blue-900 mt-0.5">JOM SERTAI AKTIVITI KOKURIKULUM</h1>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="inline-block bg-slate-900 text-white font-black text-xs px-2.5 py-1 rounded mb-1 uppercase tracking-widest">ONE PAGE REPORT</span>
+                        <p id="pdfHeaderDate" class="text-xs font-bold text-slate-700">14 JANUARI 2026 | RABU</p>
+                    </div>
+                </div>
+
+                <!-- OPR Image Grid (5 Photos Layout) -->
+                <div id="pdfImageGrid" class="grid grid-cols-3 gap-2.5 mb-5">
+                    <!-- Dynamic Images Inserted Here -->
+                </div>
+
+                <!-- OPR Content Details -->
+                <div class="space-y-3.5 text-xs leading-relaxed border-t border-slate-200 pt-3">
+                    <div>
+                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Objektif Program</h3>
+                        <div id="pdfObjektif" class="pl-3 text-slate-700 whitespace-pre-line"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Sasaran Program</h3>
+                            <p id="pdfSasaran" class="pl-3 text-slate-700"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Aktiviti</h3>
+                            <p id="pdfAktiviti" class="pl-3 text-slate-700"></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Impak</h3>
+                        <div id="pdfImpak" class="pl-3 text-slate-700 whitespace-pre-line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPR Signature Footer -->
+            <div class="pt-6 border-t border-slate-200 mt-6 text-xs">
+                <p class="text-slate-500 font-medium">Disediakan oleh :</p>
+                <p id="pdfPenyediaNama" class="font-bold text-slate-900 text-sm mt-1">Yasmin Huzaimah Binti Aladdin</p>
+                <p id="pdfPenyediaJawatan" class="text-slate-700">Penolong Kanan Kokurikulum</p>
+                <p id="pdfPenyediaSekolah" class="text-slate-500">SK Abang Gesa</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- DATA STATE & INITIALIZATION ---
         let oprList = [];
@@ -440,6 +599,7 @@
         let webAppUrl = 'https://script.google.com/macros/s/AKfycbxiMYZK_c8_TSgr4_548ftqRrD_7n22c4KOcGjhTKDsgyDy7VlPuvt2HVua_O8c6Hgfww/exec';
         let barChartInstance = null;
         let doughnutChartInstance = null;
+        let selectedBase64Images = [];
 
         window.addEventListener('DOMContentLoaded', () => {
             loadFromLocalStorage();
@@ -732,6 +892,176 @@
             doughnutChartInstance.update();
         }
 
+        // --- FUNGSI MODAL JANA OPR ---
+        function openGenerateModal() {
+            document.getElementById('generateModal').classList.remove('hidden');
+        }
+
+        function closeGenerateModal() {
+            document.getElementById('generateModal').classList.add('hidden');
+            document.getElementById('generateForm').reset();
+            selectedBase64Images = [];
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+            container.classList.add('hidden');
+        }
+
+        function handleImagePreviews(event) {
+            const files = Array.from(event.target.files).slice(0, 5);
+            selectedBase64Images = [];
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+
+            if (files.length === 0) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedBase64Images.push(e.target.result);
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-16 object-cover rounded-lg border border-slate-200 shadow-xs';
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleGenerateSubmit(event) {
+            event.preventDefault();
+
+            const unit = document.getElementById('genUnit').value;
+            const tarikh = document.getElementById('genTarikh').value;
+            const sekolah = document.getElementById('genSekolah').value;
+            const tajuk = document.getElementById('genTajuk').value;
+            const objektif = document.getElementById('genObjektif').value;
+            const sasaran = document.getElementById('genSasaran').value;
+            const aktiviti = document.getElementById('genAktiviti').value;
+            const impak = document.getElementById('genImpak').value;
+            const namaPenyedia = document.getElementById('genNamaPenyedia').value;
+            const jawatanPenyedia = document.getElementById('genJawatanPenyedia').value;
+
+            if (selectedBase64Images.length === 0) {
+                alert('Sila muat naik sekurang-kurangnya 1 hingga 5 gambar aktiviti.');
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btnGenerateSubmit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Menjana PDF...`;
+
+            // Format tarikh Bahasa Melayu
+            const formattedDateStr = formatDateToBM(tarikh);
+
+            // Populate Hidden Template Area
+            document.getElementById('pdfHeaderSchool').innerText = sekolah;
+            document.getElementById('pdfHeaderTitle').innerText = tajuk;
+            document.getElementById('pdfHeaderDate').innerText = formattedDateStr;
+            document.getElementById('pdfObjektif').innerText = objektif;
+            document.getElementById('pdfSasaran').innerText = sasaran;
+            document.getElementById('pdfAktiviti').innerText = aktiviti;
+            document.getElementById('pdfImpak').innerText = impak;
+            document.getElementById('pdfPenyediaNama').innerText = namaPenyedia;
+            document.getElementById('pdfPenyediaJawatan').innerText = jawatanPenyedia;
+            document.getElementById('pdfPenyediaSekolah').innerText = sekolah;
+
+            const gridContainer = document.getElementById('pdfImageGrid');
+            gridContainer.innerHTML = selectedBase64Images.map(imgData => `
+                <div class="aspect-4/3 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 shadow-xs">
+                    <img src="${imgData}" class="w-full h-36 object-cover" />
+                </div>
+            `).join('');
+
+            // HTML2PDF Configuration
+            const renderElement = document.getElementById('oprPdfRenderArea');
+            const opt = {
+                margin:       [0.3, 0.3, 0.3, 0.3],
+                filename:     `OPR_${tajuk.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            try {
+                // Generate PDF as Base64 Data String
+                const pdfDataUri = await html2pdf().set(opt).from(renderElement).outputPdf('datauristring');
+                const base64PDF = pdfDataUri.split(',')[1];
+                const fileName = `OPR_${tajuk.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+
+                if (webAppUrl) {
+                    const payload = {
+                        action: 'upload',
+                        unit: unit,
+                        tarikh: tarikh,
+                        tajuk: tajuk,
+                        filename: fileName,
+                        fileData: base64PDF
+                    };
+
+                    const response = await fetch(webAppUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const res = await response.json();
+                    if (res.status === "success" && res.data) {
+                        oprList.unshift(res.data);
+                    } else {
+                        oprList.unshift({
+                            id: 'opr-' + Date.now(),
+                            tajuk: tajuk,
+                            unit: unit,
+                            tarikh: tarikh,
+                            dimuatNaik: new Date().toISOString().split('T')[0],
+                            pdfUrl: pdfDataUri,
+                            fileName: fileName
+                        });
+                    }
+                } else {
+                    oprList.unshift({
+                        id: 'opr-' + Date.now(),
+                        tajuk: tajuk,
+                        unit: unit,
+                        tarikh: tarikh,
+                        dimuatNaik: new Date().toISOString().split('T')[0],
+                        pdfUrl: pdfDataUri,
+                        fileName: fileName
+                    });
+                }
+
+                saveToLocalStorage();
+                updateDashboard();
+                closeGenerateModal();
+                alert('Laporan OPR berjaya dijana dan disimpan!');
+            } catch (err) {
+                console.error("Ralat semasa menjana PDF:", err);
+                alert("Gagal menjana PDF OPR. Sila cuba lagi.");
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `<i class="fa-solid fa-file-pdf mr-1.5"></i> Jana PDF & Simpan Ke Drive`;
+            }
+        }
+
+        function formatDateToBM(dateStr) {
+            if(!dateStr) return '';
+            const d = new Date(dateStr);
+            const months = ["JANUARI", "FEBRUARI", "MAC", "APRIL", "MEI", "JUN", "JULAI", "OGOS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DISEMBER"];
+            const days = ["AHAD", "ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU"];
+            
+            const dayName = days[d.getDay()];
+            const dayNum = d.getDate();
+            const monthName = months[d.getMonth()];
+            const yearNum = d.getFullYear();
+
+            return `${dayNum} ${monthName} ${yearNum} | ${dayName}`;
+        }
+
+        // --- FUNGSI MODAL MUAT NAIK OPR ---
         function openUploadModal() {
             document.getElementById('uploadModal').classList.remove('hidden');
         }
