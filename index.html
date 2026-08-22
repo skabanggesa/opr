@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sistem Pengurusan OPR Sekolah</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,38 +33,39 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col pb-16 sm:pb-0">
 
     <!-- Top Navigation Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-14 sm:h-16 items-center gap-2">
                 <!-- Logo and System Name -->
-                <div class="flex items-center space-x-3">
-                    <img src="opr.png" alt="Logo OPR" class="w-10 h-10 object-contain rounded-xl shadow-md shadow-blue-500/20 bg-white p-1 border border-slate-100" onerror="this.onerror=null; this.outerHTML='<div class=\'w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20\'><i class=\'fa-solid fa-file-lines text-xl\'></i></div>';">
-                    <div>
-                        <h1 class="text-lg font-bold text-slate-900 leading-tight">e-OPR SK Abang Gesa</h1>
-                        <p class="text-xs text-slate-500 font-medium">Sistem Laporan Satu Muka Surat</p>
+                <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
+                    <img src="opr.png" alt="Logo OPR" class="w-8 h-8 sm:w-10 sm:h-10 object-contain rounded-xl shadow-md shadow-blue-500/10 bg-white p-0.5 sm:p-1 border border-slate-100 shrink-0" onerror="this.onerror=null; this.outerHTML='<div class=\'w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shrink-0\'><i class=\'fa-solid fa-file-lines text-base sm:text-xl\'></i></div>';">
+                    <div class="truncate">
+                        <h1 class="text-sm sm:text-lg font-bold text-slate-900 leading-tight truncate">e-OPR SK Abang Gesa</h1>
+                        <p class="text-[10px] sm:text-xs text-slate-500 font-medium hidden sm:block">Sistem Laporan Satu Muka Surat</p>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex items-center space-x-3">
-                    <button onclick="fetchFromGoogleSheets()" class="p-2 border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition" title="Muat Semula Data">
+                <!-- Action Buttons Header -->
+                <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+                    <button onclick="fetchFromGoogleSheets()" class="w-9 h-9 sm:w-auto sm:h-auto p-2 border border-slate-200 sm:border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition flex items-center justify-center" title="Muat Semula Data">
                         <i id="syncIcon" class="fa-solid fa-rotate text-xs"></i>
                     </button>
-                    <button onclick="openConfigModal()" class="hidden sm:inline-flex items-center px-3 py-2 border border-slate-300 shadow-sm text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition focus:outline-none">
-                        <i class="fa-solid fa-plug text-slate-500 mr-2"></i> Integration Sheets
+                    <button onclick="openConfigModal()" class="hidden md:inline-flex items-center px-3 py-2 border border-slate-300 shadow-sm text-xs font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-plug text-slate-500 mr-2"></i> Integration
                     </button>
-                    <button onclick="openUploadModal()" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-sm hover:shadow transition-all duration-150 transform active:scale-95">
-                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Muat Naik OPR
+                    <button onclick="openUploadModal()" class="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium text-xs sm:text-sm rounded-lg shadow-sm transition-all duration-150">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1.5 text-xs sm:text-sm"></i> <span class="hidden sm:inline">Muat Naik OPR</span><span class="sm:hidden">Muat Naik</span>
                     </button>
                 </div>
             </div>
@@ -72,220 +73,218 @@
     </header>
 
     <!-- Main Body Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8">
 
-        <!-- Banner / Welcome Section -->
-        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-            <div class="absolute right-0 top-0 bottom-0 opacity-10 flex items-center pointer-events-none pr-8">
-                <i class="fa-solid fa-chart-line text-9xl"></i>
+        <!-- Banner Section -->
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 rounded-xl sm:rounded-2xl p-4 sm:p-8 text-white shadow-lg relative overflow-hidden">
+            <div class="absolute right-0 top-0 bottom-0 opacity-10 flex items-center pointer-events-none pr-4 sm:pr-8">
+                <i class="fa-solid fa-chart-line text-7xl sm:text-9xl"></i>
             </div>
-            <div class="relative z-10 max-w-2xl space-y-2">
-                <span class="inline-block px-3 py-1 bg-white/10 text-blue-200 text-xs font-semibold rounded-full backdrop-blur-md">Papan Pemuka Pentadbir</span>
-                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Pengurusan & Pengarkiban OPR</h2>
-                <p class="text-slate-300 text-sm leading-relaxed">
+            <div class="relative z-10 max-w-2xl space-y-1.5 sm:space-y-2">
+                <span class="inline-block px-2.5 py-0.5 bg-white/10 text-blue-200 text-[10px] sm:text-xs font-semibold rounded-full backdrop-blur-md">Papan Pemuka Pentadbir</span>
+                <h2 class="text-xl sm:text-3xl font-extrabold tracking-tight leading-tight">Pengurusan & Pengarkiban OPR</h2>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
                     Urus, muat naik, dan pantau Laporan Satu Muka Surat mengikut Unit Kurikulum, Hal Ehwal Murid (HEM), dan Kokurikulum secara efisien.
                 </p>
             </div>
         </div>
 
-        <!-- Metric KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Metric KPI Cards (2x2 Grid on Mobile) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             <!-- Total OPR Card -->
-            <div onclick="filterByUnit('Semua')" class="cursor-pointer bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition group">
+            <div onclick="filterByUnit('Semua')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Keseluruhan OPR</p>
-                        <h3 id="statTotal" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                        <p class="text-[10px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider">Keseluruhan</p>
+                        <h3 id="statTotal" class="text-xl sm:text-2xl font-bold text-slate-800 mt-0.5 sm:mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-slate-800 group-hover:text-white transition">
-                        <i class="fa-solid fa-folder-closed text-xl"></i>
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-folder-closed text-base sm:text-xl"></i>
                     </div>
                 </div>
-                <div class="mt-4 flex items-center text-xs text-slate-500">
+                <div class="mt-2 sm:mt-4 flex items-center text-[10px] sm:text-xs text-slate-500 truncate">
                     <span class="text-emerald-600 font-semibold flex items-center mr-1">
-                        <i class="fa-solid fa-arrow-up text-[10px] mr-1"></i> +100%
+                        <i class="fa-solid fa-arrow-up text-[8px] mr-0.5"></i> +100%
                     </span>
-                    <span>dikemaskini</span>
+                    <span class="truncate">dikemaskini</span>
                 </div>
             </div>
 
             <!-- Kurikulum Card -->
-            <div onclick="filterByUnit('Kurikulum')" class="cursor-pointer bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition group">
+            <div onclick="filterByUnit('Kurikulum')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-medium text-blue-600 uppercase tracking-wider">Kurikulum</p>
-                        <h3 id="statKurikulum" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                        <p class="text-[10px] sm:text-xs font-semibold text-blue-600 uppercase tracking-wider">Kurikulum</p>
+                        <h3 id="statKurikulum" class="text-xl sm:text-2xl font-bold text-slate-800 mt-0.5 sm:mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
-                        <i class="fa-solid fa-book-open text-xl"></i>
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-book-open text-base sm:text-xl"></i>
                     </div>
                 </div>
-                <div class="mt-4 flex items-center text-xs text-slate-500">
-                    <span id="pctKurikulum" class="font-semibold text-slate-700 mr-1">0%</span> daripada jumlah OPR
+                <div class="mt-2 sm:mt-4 text-[10px] sm:text-xs text-slate-500 truncate">
+                    <span id="pctKurikulum" class="font-semibold text-slate-700 mr-0.5">0%</span> drpd jumlah OPR
                 </div>
             </div>
 
             <!-- HEM Card -->
-            <div onclick="filterByUnit('HEM')" class="cursor-pointer bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition group">
+            <div onclick="filterByUnit('HEM')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-medium text-emerald-600 uppercase tracking-wider">Hal Ehwal Murid</p>
-                        <h3 id="statHEM" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                        <p class="text-[10px] sm:text-xs font-semibold text-emerald-600 uppercase tracking-wider">HEM</p>
+                        <h3 id="statHEM" class="text-xl sm:text-2xl font-bold text-slate-800 mt-0.5 sm:mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition">
-                        <i class="fa-solid fa-user-shield text-xl"></i>
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-user-shield text-base sm:text-xl"></i>
                     </div>
                 </div>
-                <div class="mt-4 flex items-center text-xs text-slate-500">
-                    <span id="pctHEM" class="font-semibold text-slate-700 mr-1">0%</span> daripada jumlah OPR
+                <div class="mt-2 sm:mt-4 text-[10px] sm:text-xs text-slate-500 truncate">
+                    <span id="pctHEM" class="font-semibold text-slate-700 mr-0.5">0%</span> drpd jumlah OPR
                 </div>
             </div>
 
             <!-- Kokurikulum Card -->
-            <div onclick="filterByUnit('Kokurikulum')" class="cursor-pointer bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition group">
+            <div onclick="filterByUnit('Kokurikulum')" class="cursor-pointer bg-white p-3.5 sm:p-5 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-medium text-amber-600 uppercase tracking-wider">Kokurikulum</p>
-                        <h3 id="statKoko" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                        <p class="text-[10px] sm:text-xs font-semibold text-amber-600 uppercase tracking-wider">Kokurikulum</p>
+                        <h3 id="statKoko" class="text-xl sm:text-2xl font-bold text-slate-800 mt-0.5 sm:mt-1">0</h3>
                     </div>
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
-                        <i class="fa-solid fa-trophy text-xl"></i>
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-trophy text-base sm:text-xl"></i>
                     </div>
                 </div>
-                <div class="mt-4 flex items-center text-xs text-slate-500">
-                    <span id="pctKoko" class="font-semibold text-slate-700 mr-1">0%</span> daripada jumlah OPR
+                <div class="mt-2 sm:mt-4 text-[10px] sm:text-xs text-slate-500 truncate">
+                    <span id="pctKoko" class="font-semibold text-slate-700 mr-0.5">0%</span> drpd jumlah OPR
                 </div>
             </div>
         </div>
 
         <!-- Analytics Section -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div class="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 shadow-xs space-y-4 sm:space-y-6">
+            <div class="flex flex-row items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-chart-pie text-blue-600 mr-2"></i> Analisis Trend OPR
+                    <h3 class="text-sm sm:text-lg font-bold text-slate-800 flex items-center">
+                        <i class="fa-solid fa-chart-pie text-blue-600 mr-2 text-xs sm:text-base"></i> Analisis Trend OPR
                     </h3>
-                    <p class="text-xs text-slate-500">Visualisasi taburan laporan mengikut Unit dan Bulan</p>
+                    <p class="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Visualisasi taburan laporan mengikut Unit dan Bulan</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <select id="analyticsYearSelect" onchange="renderCharts()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 font-medium">
+                <div>
+                    <select id="analyticsYearSelect" onchange="renderCharts()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs rounded-lg p-1.5 sm:p-2 focus:ring-blue-500 font-medium">
                         <option value="2026">Tahun 2026</option>
                         <option value="2025">Tahun 2025</option>
                     </select>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 <!-- Monthly Bar Chart -->
-                <div class="lg:col-span-2 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Bilangan OPR Mengikut Bulan & Unit</h4>
-                    <div class="h-64 relative">
+                <div class="lg:col-span-2 bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100">
+                    <h4 class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Bilangan OPR Mengikut Bulan & Unit</h4>
+                    <div class="h-48 sm:h-64 relative">
                         <canvas id="barChartBulan"></canvas>
                     </div>
                 </div>
 
                 <!-- Unit Distribution Doughnut Chart -->
-                <div class="bg-slate-50/50 p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
-                    <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Agihan Peratusan Unit</h4>
-                    <div class="h-56 relative flex items-center justify-center">
+                <div class="bg-slate-50/50 p-3 sm:p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <h4 class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Agihan Peratusan Unit</h4>
+                    <div class="h-44 sm:h-56 relative flex items-center justify-center">
                         <canvas id="doughnutChartUnit"></canvas>
-                    </div>
-                    <div class="text-center text-xs text-slate-400 mt-2">
-                        Dikemaskini secara automatik
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- OPR Documents Section -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
             <!-- Header Tabs & Controls -->
-            <div class="p-6 border-b border-slate-200 space-y-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="p-4 sm:p-6 border-b border-slate-200 space-y-3 sm:space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
-                        <h3 class="text-lg font-bold text-slate-800">Senarai Rekod OPR</h3>
-                        <p class="text-xs text-slate-500">Saring dan semak laporan satu muka surat yang telah dimuat naik</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800">Senarai Rekod OPR</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Saring dan semak laporan satu muka surat yang telah dimuat naik</p>
                     </div>
 
-                    <!-- Search and Filters -->
-                    <div class="flex flex-wrap items-center gap-2">
+                    <!-- Search and Filters (Stacked nicely on Mobile) -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <!-- Search input -->
-                        <div class="relative min-w-[200px]">
+                        <div class="relative w-full sm:w-48">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari tajuk OPR..." class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Cari tajuk OPR..." class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                         </div>
 
-                        <!-- Month Filter -->
-                        <select id="monthFilter" onchange="applyFilters()" class="text-xs bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700">
-                            <option value="Semua">Semua Bulan</option>
-                            <option value="01">Januari</option>
-                            <option value="02">Februari</option>
-                            <option value="03">Mac</option>
-                            <option value="04">April</option>
-                            <option value="05">Mei</option>
-                            <option value="06">Jun</option>
-                            <option value="07">Julai</option>
-                            <option value="08">Ogos</option>
-                            <option value="09">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Disember</option>
-                        </select>
+                        <div class="flex items-center space-x-2">
+                            <!-- Month Filter -->
+                            <select id="monthFilter" onchange="applyFilters()" class="flex-1 sm:flex-none text-xs bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-700">
+                                <option value="Semua">Semua Bulan</option>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Mac</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Jun</option>
+                                <option value="07">Julai</option>
+                                <option value="08">Ogos</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Disember</option>
+                            </select>
 
-                        <!-- View Switcher -->
-                        <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
-                            <button id="viewGridBtn" onclick="toggleView('grid')" class="p-1.5 rounded text-slate-600 hover:text-slate-900 bg-white shadow-xs">
-                                <i class="fa-solid fa-grip-vertical text-xs"></i>
-                            </button>
-                            <button id="viewTableBtn" onclick="toggleView('table')" class="p-1.5 rounded text-slate-600 hover:text-slate-900">
-                                <i class="fa-solid fa-list text-xs"></i>
-                            </button>
+                            <!-- View Switcher -->
+                            <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 shrink-0">
+                                <button id="viewGridBtn" onclick="toggleView('grid')" class="p-1.5 rounded text-slate-600 hover:text-slate-900 bg-white shadow-xs">
+                                    <i class="fa-solid fa-grip-vertical text-xs"></i>
+                                </button>
+                                <button id="viewTableBtn" onclick="toggleView('table')" class="p-1.5 rounded text-slate-600 hover:text-slate-900">
+                                    <i class="fa-solid fa-list text-xs"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Unit Switching Tabs -->
-                <div class="flex space-x-2 border-b border-slate-100 pt-2 overflow-x-auto custom-scrollbar">
-                    <button onclick="filterByUnit('Semua')" id="tabSemua" class="unit-tab px-4 py-2.5 text-xs font-semibold rounded-t-lg border-b-2 border-blue-600 text-blue-600 whitespace-nowrap">
+                <!-- Unit Switching Tabs (Horizontally Scrollable on Mobile) -->
+                <div class="flex space-x-1.5 border-b border-slate-100 pt-1 overflow-x-auto no-scrollbar">
+                    <button onclick="filterByUnit('Semua')" id="tabSemua" class="unit-tab px-3.5 py-2 text-xs font-semibold rounded-t-lg border-b-2 border-blue-600 text-blue-600 whitespace-nowrap shrink-0">
                         Semua Unit
                     </button>
-                    <button onclick="filterByUnit('Kurikulum')" id="tabKurikulum" class="unit-tab px-4 py-2.5 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap">
-                        <i class="fa-solid fa-book-open mr-1.5 text-blue-500"></i> Kurikulum
+                    <button onclick="filterByUnit('Kurikulum')" id="tabKurikulum" class="unit-tab px-3.5 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-book-open mr-1 text-blue-500"></i> Kurikulum
                     </button>
-                    <button onclick="filterByUnit('HEM')" id="tabHEM" class="unit-tab px-4 py-2.5 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap">
-                        <i class="fa-solid fa-user-shield mr-1.5 text-emerald-500"></i> Hal Ehwal Murid
+                    <button onclick="filterByUnit('HEM')" id="tabHEM" class="unit-tab px-3.5 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-user-shield mr-1 text-emerald-500"></i> HEM
                     </button>
-                    <button onclick="filterByUnit('Kokurikulum')" id="tabKokurikulum" class="unit-tab px-4 py-2.5 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap">
-                        <i class="fa-solid fa-trophy mr-1.5 text-amber-500"></i> Kokurikulum
+                    <button onclick="filterByUnit('Kokurikulum')" id="tabKokurikulum" class="unit-tab px-3.5 py-2 text-xs font-medium rounded-t-lg border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-trophy mr-1 text-amber-500"></i> Kokurikulum
                     </button>
                 </div>
             </div>
 
-            <!-- Data Container (Grid View Default) -->
-            <div class="p-6 relative">
+            <!-- Data Container -->
+            <div class="p-4 sm:p-6 relative">
                 <!-- Loading Overlay -->
-                <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/70 backdrop-blur-xs z-10 flex items-center justify-center">
-                    <div class="flex items-center space-x-2 text-blue-600 font-semibold text-sm">
-                        <i class="fa-solid fa-circle-notch fa-spin text-xl"></i>
-                        <span>Sedang memuatkan data Google Sheets...</span>
+                <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/80 backdrop-blur-xs z-10 flex items-center justify-center p-4">
+                    <div class="flex items-center space-x-2 text-blue-600 font-semibold text-xs sm:text-sm bg-white p-3 rounded-xl shadow-lg border border-slate-100">
+                        <i class="fa-solid fa-circle-notch fa-spin text-lg"></i>
+                        <span>Sedang memuatkan data...</span>
                     </div>
                 </div>
 
                 <!-- Grid View -->
-                <div id="oprGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div id="oprGridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                     <!-- Dynamic Grid Content Rendered by JS -->
                 </div>
 
                 <!-- Table View (Hidden by default) -->
                 <div id="oprTableView" class="hidden overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-left text-xs text-slate-600">
+                    <table class="w-full text-left text-xs text-slate-600 min-w-[500px]">
                         <thead class="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold uppercase tracking-wider">
                             <tr>
-                                <th class="p-3.5">Tajuk OPR</th>
-                                <th class="p-3.5">Unit</th>
-                                <th class="p-3.5">Tarikh Program</th>
-                                <th class="p-3.5">Dimuat Naik</th>
-                                <th class="p-3.5 text-right">Tindakan</th>
+                                <th class="p-3">Tajuk OPR</th>
+                                <th class="p-3">Unit</th>
+                                <th class="p-3">Tarikh Program</th>
+                                <th class="p-3 text-right">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody id="oprTableBody" class="divide-y divide-slate-200">
@@ -295,42 +294,44 @@
                 </div>
 
                 <!-- Empty State -->
-                <div id="emptyState" class="hidden text-center py-12 space-y-3">
-                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
-                        <i class="fa-solid fa-folder-open text-2xl"></i>
+                <div id="emptyState" class="hidden text-center py-10 space-y-2">
+                    <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
+                        <i class="fa-solid fa-folder-open text-xl"></i>
                     </div>
-                    <h4 class="text-sm font-semibold text-slate-700">Tiada Rekod OPR Dijumpai</h4>
-                    <p class="text-xs text-slate-400 max-w-sm mx-auto">Sila muat naik OPR baharu atau tukar kata kunci carian/penapis anda.</p>
-                    <button onclick="openUploadModal()" class="inline-flex items-center text-xs text-blue-600 font-semibold hover:underline mt-2">
-                        <i class="fa-solid fa-plus mr-1"></i> Muat Naik Sekarang
-                    </button>
+                    <h4 class="text-xs sm:text-sm font-semibold text-slate-700">Tiada Rekod OPR Dijumpai</h4>
+                    <p class="text-[11px] text-slate-400 max-w-xs mx-auto">Sila muat naik OPR baharu atau tukar kata kunci carian/penapis anda.</p>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Floating Action Button for Mobile Quick Upload -->
+    <button onclick="openUploadModal()" class="sm:hidden fixed right-4 bottom-5 z-40 w-12 h-12 bg-blue-600 text-white rounded-full shadow-xl flex items-center justify-center active:scale-95 transition">
+        <i class="fa-solid fa-plus text-lg"></i>
+    </button>
+
     <!-- MODAL 1: Muat Naik OPR -->
-    <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+    <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 overflow-hidden my-auto max-h-[90vh] flex flex-col">
             <!-- Modal Header -->
-            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+            <div class="bg-slate-50 px-4 sm:px-6 py-3.5 border-b border-slate-200 flex justify-between items-center shrink-0">
                 <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+                    <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs sm:text-sm">
                         <i class="fa-solid fa-file-arrow-up"></i>
                     </div>
-                    <h3 class="font-bold text-slate-800 text-base">Muat Naik OPR Baharu</h3>
+                    <h3 class="font-bold text-slate-800 text-sm sm:text-base">Muat Naik OPR Baharu</h3>
                 </div>
-                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <!-- Modal Form -->
-            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="p-6 space-y-4">
+            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="p-4 sm:p-6 space-y-3.5 sm:space-y-4 overflow-y-auto">
                 <!-- Unit Select -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Unit OPR <span class="text-red-500">*</span></label>
-                    <select id="inputUnit" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                    <select id="inputUnit" required class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                         <option value="" disabled selected>-- Pilih Unit --</option>
                         <option value="Kurikulum">Kurikulum</option>
                         <option value="HEM">Hal Ehwal Murid (HEM)</option>
@@ -341,39 +342,39 @@
                 <!-- Tarikh OPR -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh Program/Laporan <span class="text-red-500">*</span></label>
-                    <input type="date" id="inputTarikh" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                    <input type="date" id="inputTarikh" required class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                 </div>
 
                 <!-- Tajuk OPR -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Tajuk OPR <span class="text-red-500">*</span></label>
-                    <input type="text" id="inputTajuk" required placeholder="Contoh: Laporan Hari Sukan Negara 2026" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                    <input type="text" id="inputTajuk" required placeholder="Contoh: Laporan Hari Sukan Negara 2026" class="w-full px-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                 </div>
 
                 <!-- File Drag & Drop Upload Zone -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Fail Dokumen (PDF sahaja) <span class="text-red-500">*</span></label>
-                    <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/20 rounded-xl p-5 text-center transition cursor-pointer relative">
+                    <div id="dropZone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/20 rounded-xl p-4 sm:p-5 text-center transition cursor-pointer relative">
                         <input type="file" id="inputFile" accept="application/pdf" required onchange="handleFileSelect(event)" class="absolute inset-0 opacity-0 cursor-pointer">
-                        <div id="uploadPrompt" class="space-y-2">
-                            <i class="fa-solid fa-file-pdf text-3xl text-red-500"></i>
+                        <div id="uploadPrompt" class="space-y-1.5">
+                            <i class="fa-solid fa-file-pdf text-2xl sm:text-3xl text-red-500"></i>
                             <p class="text-xs text-slate-600 font-medium">Klik atau seret fail PDF ke sini</p>
                             <p class="text-[10px] text-slate-400">Maksimum saiz fail: 10MB</p>
                         </div>
                         <div id="fileSelectedInfo" class="hidden space-y-1">
-                            <i class="fa-solid fa-circle-check text-2xl text-emerald-500"></i>
-                            <p id="fileNameText" class="text-xs font-semibold text-slate-700 truncate max-w-xs mx-auto">filename.pdf</p>
+                            <i class="fa-solid fa-circle-check text-xl text-emerald-500"></i>
+                            <p id="fileNameText" class="text-xs font-semibold text-slate-700 truncate max-w-[200px] sm:max-w-xs mx-auto">filename.pdf</p>
                             <p id="fileSizeText" class="text-[10px] text-slate-400">1.2 MB</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Footer Buttons -->
-                <div class="pt-4 flex items-center justify-end space-x-3 border-t border-slate-100">
-                    <button type="button" onclick="closeUploadModal()" class="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">
+                <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-100 shrink-0">
+                    <button type="button" onclick="closeUploadModal()" class="px-3.5 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">
                         Batal
                     </button>
-                    <button type="submit" id="btnSubmit" class="px-5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition flex items-center">
+                    <button type="submit" id="btnSubmit" class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition flex items-center">
                         <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Simpan & Muat Naik
                     </button>
                 </div>
@@ -381,55 +382,51 @@
         </div>
     </div>
 
-    <!-- MODAL 2: PDF Viewer / Preview Modal -->
-    <div id="pdfViewerModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
-            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center space-x-3 truncate">
-                    <i class="fa-solid fa-file-pdf text-red-400 text-xl"></i>
-                    <h3 id="previewTitle" class="font-bold text-sm truncate max-w-md">Dokumen OPR</h3>
+    <!-- MODAL 2: PDF Viewer Modal -->
+    <div id="pdfViewerModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center hidden p-2 sm:p-4">
+        <div class="bg-white w-full max-w-4xl h-[92vh] sm:h-[85vh] rounded-xl sm:rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
+            <div class="bg-slate-900 text-white px-3.5 sm:px-6 py-3 flex justify-between items-center shrink-0">
+                <div class="flex items-center space-x-2 truncate">
+                    <i class="fa-solid fa-file-pdf text-red-400 text-lg sm:text-xl"></i>
+                    <h3 id="previewTitle" class="font-bold text-xs sm:text-sm truncate max-w-[180px] sm:max-w-md">Dokumen OPR</h3>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <a id="previewDownloadBtn" href="#" download target="_blank" class="px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg flex items-center transition">
-                        <i class="fa-solid fa-download mr-1.5"></i> Buka / Muat Turun
+                <div class="flex items-center space-x-1.5">
+                    <a id="previewDownloadBtn" href="#" download target="_blank" class="px-2.5 py-1.5 text-[11px] sm:text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg flex items-center transition">
+                        <i class="fa-solid fa-download mr-1"></i> Buka
                     </a>
-                    <button onclick="closePdfModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
-                        <i class="fa-solid fa-xmark text-xl"></i>
+                    <button onclick="closePdfModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
             </div>
-            <div class="flex-grow bg-slate-100 relative flex items-center justify-center p-4">
+            <div class="flex-grow bg-slate-100 relative flex items-center justify-center p-2 sm:p-4">
                 <iframe id="pdfFrame" class="w-full h-full rounded-lg border border-slate-200 bg-white shadow-inner" src=""></iframe>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 3: Google Sheets Apps Script Settings -->
-    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
-            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                <h3 class="font-bold text-slate-800 text-sm flex items-center">
-                    <i class="fa-solid fa-gear text-slate-500 mr-2"></i> Tetapan Integrasi Google Sheets
+    <!-- MODAL 3: Google Sheets Integration Settings -->
+    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-3 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-100 overflow-hidden my-auto">
+            <div class="bg-slate-50 px-4 sm:px-6 py-3.5 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center">
+                    <i class="fa-solid fa-gear text-slate-500 mr-2"></i> Tetapan Integrasi Sheets
                 </h3>
-                <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600">
+                <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600 p-1">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div class="p-6 space-y-4 text-xs">
+            <div class="p-4 sm:p-6 space-y-3 sm:space-y-4 text-xs">
                 <p class="text-slate-600 leading-relaxed">
                     Masukkan URL **Google Apps Script Web App** anda untuk menghubungkan sistem ini terus dengan Google Sheets dan Google Drive.
                 </p>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Web App Executable URL:</label>
-                    <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-blue-500 font-mono text-[11px]">
-                </div>
-                <div class="bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-lg text-[11px] space-y-1">
-                    <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Nota Penting:</p>
-                    <p>Jika URL tidak ditetapkan, sistem akan beroperasi dalam mod memori tempatan (*Local Demo Storage*).</p>
+                    <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-blue-500 font-mono text-[10px] sm:text-[11px]">
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
-                    <button onclick="closeConfigModal()" class="px-4 py-2 text-slate-600">Batal</button>
-                    <button onclick="saveConfig()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">Simpan Web App URL</button>
+                    <button onclick="closeConfigModal()" class="px-3 py-2 text-slate-600">Batal</button>
+                    <button onclick="saveConfig()" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">Simpan URL</button>
                 </div>
             </div>
         </div>
@@ -438,14 +435,12 @@
     <script>
         // --- DATA STATE & INITIALIZATION ---
         let oprList = [];
-
         let currentActiveUnit = 'Semua';
-        let currentViewMode = 'grid'; // 'grid' or 'table'
+        let currentViewMode = 'grid';
         let webAppUrl = 'https://script.google.com/macros/s/AKfycbxiMYZK_c8_TSgr4_548ftqRrD_7n22c4KOcGjhTKDsgyDy7VlPuvt2HVua_O8c6Hgfww/exec';
         let barChartInstance = null;
         let doughnutChartInstance = null;
 
-        // Initialize App on DOM Load
         window.addEventListener('DOMContentLoaded', () => {
             loadFromLocalStorage();
             initCharts();
@@ -481,7 +476,6 @@
             
             const currentSelected = yearSelect.value;
             const years = new Set();
-            
             const currentYear = new Date().getFullYear();
             years.add(currentYear);
             years.add(currentYear - 1);
@@ -494,7 +488,6 @@
             });
 
             const sortedYears = Array.from(years).sort((a, b) => b - a);
-            
             yearSelect.innerHTML = sortedYears.map(y => `<option value="${y}">Tahun ${y}</option>`).join('');
             
             if (currentSelected && sortedYears.includes(parseInt(currentSelected, 10))) {
@@ -504,7 +497,6 @@
             }
         }
 
-        // Calculate KPI Metrics
         function calculateStats() {
             const total = oprList.length;
             const kurikulum = oprList.filter(o => o.unit === 'Kurikulum').length;
@@ -521,11 +513,9 @@
             document.getElementById('pctKoko').innerText = total > 0 ? Math.round((koko/total)*100) + '%' : '0%';
         }
 
-        // Filter and Search Logic
         function filterByUnit(unit) {
             currentActiveUnit = unit;
 
-            // Update tab styles
             document.querySelectorAll('.unit-tab').forEach(tab => {
                 tab.classList.remove('border-blue-600', 'text-blue-600', 'font-semibold');
                 tab.classList.add('border-transparent', 'text-slate-500', 'font-medium');
@@ -581,31 +571,28 @@
 
             emptyState.classList.add('hidden');
 
-            // Render Grid Cards
             gridContainer.innerHTML = items.map(item => {
                 const badgeColor = getUnitBadgeColor(item.unit);
                 return `
-                    <div class="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
-                        <div class="space-y-3">
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 hover:shadow-md transition flex flex-col justify-between group">
+                        <div class="space-y-2.5">
                             <div class="flex items-center justify-between">
-                                <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${badgeColor.bg} ${badgeColor.text}">
+                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${badgeColor.bg} ${badgeColor.text}">
                                     ${item.unit}
                                 </span>
-                                <span class="text-[11px] text-slate-400 font-medium">
+                                <span class="text-[10px] sm:text-[11px] text-slate-400 font-medium">
                                     <i class="fa-regular fa-calendar mr-1"></i>${formatDate(item.tarikh)}
                                 </span>
                             </div>
-                            <h4 class="font-bold text-slate-800 text-sm leading-snug group-hover:text-blue-600 transition truncate-2-lines">
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm leading-snug line-clamp-2">
                                 ${escapeHtml(item.tajuk)}
                             </h4>
                         </div>
 
-                        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <button onclick="openPdfViewer('${item.pdfUrl}', '${escapeHtml(item.tajuk)}')" class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-medium text-xs rounded-lg transition">
-                                    <i class="fa-regular fa-file-pdf text-red-500 mr-1.5"></i> Lihat PDF
-                                </button>
-                            </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <button onclick="openPdfViewer('${item.pdfUrl}', '${escapeHtml(item.tajuk)}')" class="inline-flex items-center px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-medium text-xs rounded-lg transition">
+                                <i class="fa-regular fa-file-pdf text-red-500 mr-1.5"></i> Lihat PDF
+                            </button>
                             <button onclick="deleteOpr('${item.id}')" title="Padam OPR" class="p-1.5 text-slate-400 hover:text-red-600 rounded-lg transition">
                                 <i class="fa-regular fa-trash-can text-xs"></i>
                             </button>
@@ -614,24 +601,22 @@
                 `;
             }).join('');
 
-            // Render Table Rows
             tableBody.innerHTML = items.map(item => {
                 const badgeColor = getUnitBadgeColor(item.unit);
                 return `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3.5 font-semibold text-slate-800">${escapeHtml(item.tajuk)}</td>
-                        <td class="p-3.5">
+                        <td class="p-3 font-semibold text-slate-800">${escapeHtml(item.tajuk)}</td>
+                        <td class="p-3">
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgeColor.bg} ${badgeColor.text}">
                                 ${item.unit}
                             </span>
                         </td>
-                        <td class="p-3.5 text-slate-500">${formatDate(item.tarikh)}</td>
-                        <td class="p-3.5 text-slate-400">${formatDate(item.dimuatNaik)}</td>
-                        <td class="p-3.5 text-right space-x-2">
-                            <button onclick="openPdfViewer('${item.pdfUrl}', '${escapeHtml(item.tajuk)}')" class="px-2.5 py-1 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 rounded font-medium">
+                        <td class="p-3 text-slate-500">${formatDate(item.tarikh)}</td>
+                        <td class="p-3 text-right space-x-1.5">
+                            <button onclick="openPdfViewer('${item.pdfUrl}', '${escapeHtml(item.tajuk)}')" class="px-2 py-1 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 rounded font-medium">
                                 Papar
                             </button>
-                            <button onclick="deleteOpr('${item.id}')" class="px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 rounded">
+                            <button onclick="deleteOpr('${item.id}')" class="px-2 py-1 text-xs text-red-600 hover:bg-red-50 rounded">
                                 Padam
                             </button>
                         </td>
@@ -661,7 +646,6 @@
         }
 
         function initCharts() {
-            // Bar Chart (Monthly)
             const ctxBar = document.getElementById('barChartBulan').getContext('2d');
             barChartInstance = new Chart(ctxBar, {
                 type: 'bar',
@@ -676,15 +660,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+                    plugins: { legend: { position: 'top', labels: { font: { size: 10 } } } },
                     scales: {
                         x: { grid: { display: false } },
-                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                        y: { beginAtZero: true, ticks: { precision: 0 } }
                     }
                 }
             });
 
-            // Doughnut Chart (Unit Distribution)
             const ctxDoughnut = document.getElementById('doughnutChartUnit').getContext('2d');
             doughnutChartInstance = new Chart(ctxDoughnut, {
                 type: 'doughnut',
@@ -700,7 +683,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
+                    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } }
                 }
             });
 
@@ -740,18 +723,15 @@
                 }
             });
 
-            // Update Bar Chart
             barChartInstance.data.datasets[0].data = monthsData['Kurikulum'];
             barChartInstance.data.datasets[1].data = monthsData['HEM'];
             barChartInstance.data.datasets[2].data = monthsData['Kokurikulum'];
             barChartInstance.update();
 
-            // Update Doughnut Chart
             doughnutChartInstance.data.datasets[0].data = [kurikulumCount, hemCount, kokoCount];
             doughnutChartInstance.update();
         }
 
-        // Upload Modal Functions
         function openUploadModal() {
             document.getElementById('uploadModal').classList.remove('hidden');
         }
@@ -794,7 +774,7 @@
 
             const file = fileInput.files[0];
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat naik ke Google Drive...`;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat naik...`;
 
             if(webAppUrl) {
                 try {
@@ -820,7 +800,6 @@
                         if (res.status === "success" && res.data) {
                             oprList.unshift(res.data);
                         } else {
-                            // Fallback jika response berlainan
                             oprList.unshift({
                                 id: 'opr-' + Date.now(),
                                 tajuk: tajuk,
@@ -837,17 +816,16 @@
                         closeUploadModal();
                         btnSubmit.disabled = false;
                         btnSubmit.innerHTML = `<i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Simpan & Muat Naik`;
-                        alert('OPR berjaya disimpan ke Google Sheets & Drive!');
+                        alert('OPR berjaya disimpan!');
                     };
                     reader.readAsDataURL(file);
                     return;
                 } catch(err) {
                     console.error("Gagal muat naik ke Google Sheets:", err);
-                    alert("Gagal menghubungkan ke Google Sheets. Rekod disimpan secara tempatan sahaja.");
+                    alert("Gagal menghubungkan ke Google Sheets. Rekod disimpan secara tempatan.");
                 }
             }
 
-            // Fallback Mod Local
             const blobUrl = URL.createObjectURL(file);
             const todayStr = new Date().toISOString().split('T')[0];
             oprList.unshift({
@@ -867,7 +845,7 @@
         }
 
         async function deleteOpr(id) {
-            if(confirm('Adakah anda pasti mahu memadamkan rekod OPR ini?')) {
+            if(confirm('Padamkan rekod OPR ini?')) {
                 oprList = oprList.filter(item => item.id !== id);
                 saveToLocalStorage();
                 updateDashboard();
@@ -886,7 +864,6 @@
             }
         }
 
-        // Penukar format Google Drive URL ke Preview Link untuk iframe
         function getEmbeddablePdfUrl(url) {
             if(!url) return '';
             if(url.includes('drive.google.com')) {
@@ -895,7 +872,6 @@
             return url;
         }
 
-        // PDF Viewer Controls
         function openPdfViewer(url, title) {
             const embedUrl = getEmbeddablePdfUrl(url);
             document.getElementById('pdfViewerModal').classList.remove('hidden');
@@ -909,7 +885,6 @@
             document.getElementById('pdfFrame').src = '';
         }
 
-        // Config Integration Modal Controls
         function openConfigModal() {
             document.getElementById('configModal').classList.remove('hidden');
         }
@@ -924,10 +899,9 @@
             localStorage.setItem('opr_web_app_url', url);
             closeConfigModal();
             fetchFromGoogleSheets();
-            alert('URL Integrasi Google Sheets telah disimpan.');
+            alert('URL Integrasi disimpan.');
         }
 
-        // Helper Utilities
         function getUnitBadgeColor(unit) {
             switch(unit) {
                 case 'Kurikulum': return { bg: 'bg-blue-100', text: 'text-blue-700' };
@@ -956,7 +930,6 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // Fungsi untuk memuat turun data secara langsung dari Google Sheets
         async function fetchFromGoogleSheets() {
             if (!webAppUrl) {
                 updateDashboard();
@@ -976,7 +949,7 @@
                     saveToLocalStorage();
                 }
             } catch (err) {
-                console.error("Gagal menarik data dari Google Sheets:", err);
+                console.error("Gagal menarik data:", err);
             } finally {
                 if (syncIcon) syncIcon.classList.remove('fa-spin');
                 if (loadingOverlay) loadingOverlay.classList.add('hidden');
