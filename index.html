@@ -534,58 +534,64 @@ Peningkatan kadar penyertaan murid dalam aktiviti.</textarea>
         </div>
     </div>
 
-    <!-- CONCEALED PRINT TEMPLATE FOR PDF GENERATION (A4 Standard Format) -->
+<!-- CONCEALED PRINT TEMPLATE FOR PDF GENERATION (A4 Standard Format) -->
     <div class="fixed -left-[9999px] top-0 pointer-events-none">
-        <div id="oprPdfRenderArea" class="w-[794px] min-h-[1123px] p-8 bg-white text-slate-900 font-sans border border-slate-200 flex flex-col justify-between box-border">
-            <div>
-                <!-- OPR Header Banner -->
-                <div class="border-b-4 border-slate-900 pb-3 mb-4 flex justify-between items-end">
-                    <div>
-                        <h2 id="pdfHeaderSchool" class="text-lg font-black tracking-wider uppercase text-slate-900">SEKOLAH KEBANGSAAN ABANG GESA</h2>
-                        <h1 id="pdfHeaderTitle" class="text-xl font-extrabold uppercase text-blue-900 mt-0.5">JOM SERTAI AKTIVITI KOKURIKULUM</h1>
+        <!-- Bekas A4 dikunci pada 794px x 1123px dengan warna latar belakang -->
+        <div id="oprPdfRenderArea" style="width: 794px; height: 1115px; background: linear-gradient(to bottom, #ffffff 20%, #fff7ed 50%, #fed7aa 100%);" class="p-8 text-slate-900 font-sans border border-slate-200 flex flex-col box-border overflow-hidden relative">
+            
+            <!-- OPR Header Banner -->
+            <div class="border-b-4 border-slate-900 pb-3 mb-4 flex justify-between items-start">
+                <div class="flex-1 pr-4">
+                    <h2 id="pdfHeaderSchool" class="text-base font-black tracking-wider uppercase text-slate-900">SEKOLAH KEBANGSAAN ABANG GESA</h2>
+                    <h1 id="pdfHeaderTitle" class="text-xl font-extrabold uppercase text-blue-900 mt-0.5 leading-tight">JOM SERTAI AKTIVITI KOKURIKULUM</h1>
+                    <div class="mt-2 flex items-center">
+                        <span class="inline-block bg-slate-900 text-white font-black text-[10px] px-2 py-1 rounded uppercase tracking-widest">ONE PAGE REPORT</span>
+                        <span id="pdfHeaderDate" class="text-xs font-bold text-slate-700 ml-2">14 JANUARI 2026 | RABU</span>
                     </div>
-                    <div class="text-right shrink-0">
-                        <span class="inline-block bg-slate-900 text-white font-black text-xs px-2.5 py-1 rounded mb-1 uppercase tracking-widest">ONE PAGE REPORT</span>
-                        <p id="pdfHeaderDate" class="text-xs font-bold text-slate-700">14 JANUARI 2026 | RABU</p>
+                </div>
+                <!-- Bahagian Logo (Kanan Atas) -->
+                <div class="flex items-center space-x-3 shrink-0">
+                    <!-- Pastikan fail ts25.png dan logo.png berada dalam folder yang sama dengan index_2.html -->
+                    <img src="ts25.png" alt="TS25" class="h-16 w-auto object-contain">
+                    <img src="logo.png" alt="Logo Sekolah" class="h-16 w-auto object-contain">
+                </div>
+            </div>
+
+            <!-- OPR Image Grid (Flexbox untuk susun gambar dengan kemas) -->
+            <div id="pdfImageGrid" class="flex flex-wrap justify-center gap-3 mb-4">
+                <!-- Gambar akan dimasukkan oleh JavaScript -->
+            </div>
+
+            <!-- OPR Content Details -->
+            <div class="flex-grow space-y-4 text-xs leading-relaxed border-t border-slate-300/50 pt-4">
+                <div>
+                    <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-orange-500 pl-2 mb-1">Objektif Program</h3>
+                    <div id="pdfObjektif" class="pl-3 text-slate-800 whitespace-pre-line text-[11px] sm:text-xs"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-orange-500 pl-2 mb-1">Sasaran Program</h3>
+                        <p id="pdfSasaran" class="pl-3 text-slate-800 text-[11px] sm:text-xs"></p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-orange-500 pl-2 mb-1">Aktiviti</h3>
+                        <p id="pdfAktiviti" class="pl-3 text-slate-800 text-[11px] sm:text-xs"></p>
                     </div>
                 </div>
 
-                <!-- OPR Image Grid (5 Photos Layout) -->
-                <div id="pdfImageGrid" class="grid grid-cols-3 gap-2.5 mb-5">
-                    <!-- Dynamic Images Inserted Here -->
-                </div>
-
-                <!-- OPR Content Details -->
-                <div class="space-y-3.5 text-xs leading-relaxed border-t border-slate-200 pt-3">
-                    <div>
-                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Objektif Program</h3>
-                        <div id="pdfObjektif" class="pl-3 text-slate-700 whitespace-pre-line"></div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Sasaran Program</h3>
-                            <p id="pdfSasaran" class="pl-3 text-slate-700"></p>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Aktiviti</h3>
-                            <p id="pdfAktiviti" class="pl-3 text-slate-700"></p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-blue-600 pl-2 mb-1">Impak</h3>
-                        <div id="pdfImpak" class="pl-3 text-slate-700 whitespace-pre-line"></div>
-                    </div>
+                <div>
+                    <h3 class="font-bold text-slate-900 uppercase tracking-wide border-l-4 border-orange-500 pl-2 mb-1">Impak</h3>
+                    <div id="pdfImpak" class="pl-3 text-slate-800 whitespace-pre-line text-[11px] sm:text-xs"></div>
                 </div>
             </div>
 
             <!-- OPR Signature Footer -->
-            <div class="pt-6 border-t border-slate-200 mt-6 text-xs">
-                <p class="text-slate-500 font-medium">Disediakan oleh :</p>
-                <p id="pdfPenyediaNama" class="font-bold text-slate-900 text-sm mt-1">Yasmin Huzaimah Binti Aladdin</p>
-                <p id="pdfPenyediaJawatan" class="text-slate-700">Penolong Kanan Kokurikulum</p>
-                <p id="pdfPenyediaSekolah" class="text-slate-500">SK Abang Gesa</p>
+            <div class="pt-4 border-t border-slate-300/50 mt-auto text-xs pb-4">
+                <p class="text-slate-600 font-medium">Disediakan oleh :</p>
+                <p id="pdfPenyediaNama" class="font-bold text-slate-900 mt-1 uppercase"></p>
+                <p id="pdfPenyediaJawatan" class="text-slate-800 capitalize"></p>
+                <p id="pdfPenyediaSekolah" class="text-slate-600"></p>
             </div>
         </div>
     </div>
@@ -970,20 +976,22 @@ Peningkatan kadar penyertaan murid dalam aktiviti.</textarea>
             document.getElementById('pdfPenyediaSekolah').innerText = sekolah;
 
             const gridContainer = document.getElementById('pdfImageGrid');
-            gridContainer.innerHTML = selectedBase64Images.map(imgData => `
-                <div class="aspect-4/3 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 shadow-xs">
-                    <img src="${imgData}" class="w-full h-36 object-cover" />
+            gridContainer.innerHTML = selectedBase64Images.map((imgData, index) => `
+                <div class="bg-white p-1.5 rounded-md border-4 border-black shadow-md shrink-0 flex items-center justify-center" style="width: 31%;">
+                    <img src="${imgData}" class="h-32 sm:h-36 w-full object-cover rounded" />
                 </div>
             `).join('');
 
-            // HTML2PDF Configuration
+            // HTML2PDF Configuration - Kembali ke format A4 standard
             const renderElement = document.getElementById('oprPdfRenderArea');
             const opt = {
-                margin:       [0.3, 0.3, 0.3, 0.3],
+                margin:       0, 
                 filename:     `OPR_${tajuk.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                // Buang width tetap, tambah scrollX dan scrollY supaya ia tidak lari ke kiri
+                html2canvas:  { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0 },
+                // Guna format 'a4' standard
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' } 
             };
 
             try {
